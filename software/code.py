@@ -2,24 +2,11 @@ import board
 import digitalio
 import time
 from adafruit_debouncer import Debouncer
-#import neopixel
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
 from adafruit_hid.consumer_control import ConsumerControl
 from adafruit_hid.consumer_control_code import ConsumerControlCode
 import usb_hid
-
-#pixels = neopixel.NeoPixel(
-#    board.D2, 12, brightness=0.5, auto_write=False, pixel_order=neopixel.GRB
-#)
-
-#pixelcolor = [100,100,100,100,100,100,100,100,100,100,100,100]
-
-def pixel_display():
-    for x in range(0,len(pixelcolor)):
-       pixels[x]=(pixelcolor[x],0,0)
-
-pixelposition = 0
 
 led = digitalio.DigitalInOut(board.D13)
 led.direction = digitalio.Direction.OUTPUT
@@ -41,7 +28,7 @@ rot_b.direction = digitalio.Direction.INPUT
 rot_b.pull = digitalio.Pull.UP
 rotB = Debouncer(rot_b)
 
-kbd = Keyboard(usb_hid.devices)
+keyboard = Keyboard(usb_hid.devices)
 cc = ConsumerControl(usb_hid.devices)
 
 # the counter counts up and down, it can roll over! 16-bit value
@@ -51,10 +38,6 @@ clockWISE = False
 rotmove = False
 
 while True:
-    #print("hello")
-#    pixel_display()
-#    pixels[int(encoder_counter/2)]=(0,0,255)
-#    pixels.show()
     switch.update()
     rotA.update()
     rotB.update()
@@ -140,9 +123,9 @@ while True:
     if switch.fell:
         print("Button pressed!")
         led.value = True
-        encoder_counter = 0
-        print ("reset encoder",    encoder_counter)
+        #keyboard.press(Keycode.A)
         cc.send(ConsumerControlCode.MUTE)
     if switch.rose:
         print("Button Released!")
         led.value = False
+        #keyboard.release(Keycode.A)  # ..."Release"!
